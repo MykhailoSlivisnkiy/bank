@@ -16,7 +16,7 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public List<Transaction> readAll() {
+    public List<Transaction> findAll() {
         return transactionRepository.findAll();
     }
 

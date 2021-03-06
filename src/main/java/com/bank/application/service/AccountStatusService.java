@@ -2,7 +2,6 @@ package com.bank.application.service;
 
 import com.bank.application.constant.ErrorMessages;
 import com.bank.application.exception.NotFoundIdException;
-import com.bank.application.model.Account;
 import com.bank.application.model.AccountStatus;
 import com.bank.application.repository.AccountStatusRepository;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,10 @@
 package com.bank.application.model;
 
+import com.bank.application.model.enums.AccountStatus;
+import com.bank.application.model.enums.AccountType;
 import lombok.*;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity(name = "Account")
@@ -19,8 +22,11 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountIdSeq")
     private Long id;
 
-    @Column(name = "account_name", unique = true, nullable = false)
-    private String name;
+    @Column(name = "account_number", unique = true, nullable = false)
+    private String accountNumber;
+
+    @Column(name = "card_varification_value", nullable = false)
+    private String cvv;
 
     @Column(name = "balance")
     private Integer balance;
@@ -29,17 +35,22 @@ public class Account {
     private String currency;
 
     @Column(name = "opened_date")
-    private Date openedDate;
+    private LocalDateTime openedDate;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "clientId", nullable = false)
-    private Client client;
+    @JoinColumn(name = "client_id", nullable = false)
+    private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Enumerated(value = EnumType.ORDINAL)
     @JoinColumn(name = "account_status", nullable = false)
     private AccountStatus accountStatus;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Enumerated(value = EnumType.ORDINAL)
     @JoinColumn(name = "account_type", nullable = false)
     private AccountType accountType;
+
+    @PrePersist()
+    public void createOpenedDate() {
+        setOpenedDate(LocalDateTime.now());
+    }
 }

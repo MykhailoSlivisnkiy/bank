@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class AccountStatus {
     @Id
     @Column(name = "id")
-    @SequenceGenerator(name = "accountStatusIdSeq", sequenceName = "account_status_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "accountStatusIdSeq", sequenceName = "client_id", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountStatusIdSeq")
     private Long id;
 

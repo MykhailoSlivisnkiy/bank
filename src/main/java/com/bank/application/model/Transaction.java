@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity(name = "Transaction")
+@Entity
 @Table(name = "transactions")
 @AllArgsConstructor
 @NoArgsConstructor
