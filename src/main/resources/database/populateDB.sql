@@ -11,9 +11,9 @@ INSERT INTO account_type VALUES
 (3, 'Credit Card');
 
 INSERT INTO users VALUES
-(1, 'Misha', 'Slivinskiy', 'miwka0806@gmail.com', 'admin', '123', '380661480760', 2500, null),
-(2, 'Pavlo', 'Balukh', 'pashka@gmail.com', 'employee', '123', '380661480760', 500, null),
-(3, 'Andriy', 'Tretiak', 'andruDick@gmail.com', 'user', '123', '380661480760', null, '2001-09-02');
+(1, 'Misha', 'Slivinskiy', 'miwka0806@gmail.com', 'admin', '$2a$10$wjZXR6VOg1WtMR6nsLgeruX2xhCgGliq8SRsPfjpox55ns6hrKlrG', '380661480760', 2500, null),
+(2, 'Pavlo', 'Balukh', 'pashka@gmail.com', 'employee', '$2a$10$kw/JFfdej.a5ALnDjX/XDudxXc4JU4aefEGxWbT0wZZrqednTpg9u', '380661480760', 500, null),
+(3, 'Andriy', 'Tretiak', 'andruDick@gmail.com', 'user', '$2a$10$kw/JFfdej.a5ALnDjX/XDudxXc4JU4aefEGxWbT0wZZrqednTpg9u', '380661480760', null, '2001-09-02');
 
 INSERT INTO accounts VALUES
 (1, '1111 1111 1111 1111', '123', 1, 1, 1, 15000, 'USD', '2001-10-05'),

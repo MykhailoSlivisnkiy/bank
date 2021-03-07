@@ -1,12 +1,10 @@
 package com.bank.application.model;
 
 import com.bank.application.model.enums.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -30,8 +28,8 @@ public class User {
     @Column(name = "lastname")
     private String lastName;
 
-    @Column(name = "login", unique = true)
-    private String login;
+    @Column(name = "username", unique = true)
+    private String username;
 
     @Column(name = "password")
     private String password;
@@ -48,7 +46,7 @@ public class User {
     @Column(name = "salary")
     private Integer salary;
 
-    @ElementCollection(targetClass = com.bank.application.model.enums.Role.class)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @Column(name = "role_id", nullable = false)
     @Enumerated(EnumType.ORDINAL)
