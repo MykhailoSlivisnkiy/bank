@@ -2,7 +2,6 @@ package com.bank.application.controller;
 
 import com.bank.application.dto.user.ClientDto;
 import com.bank.application.dto.user.EmployeeDto;
-import com.bank.application.mapper.user.ClientResponseMapper;
 import com.bank.application.model.User;
 import com.bank.application.service.UserService;
 import lombok.AllArgsConstructor;

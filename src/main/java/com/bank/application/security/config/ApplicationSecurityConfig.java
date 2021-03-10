@@ -1,5 +1,8 @@
-package com.bank.application.security;
+package com.bank.application.security.config;
 
+import com.bank.application.config.SecurityConfig;
+import com.bank.application.security.filters.JwtAuthenticationFilter;
+import com.bank.application.security.filters.JwtUserAndPasswordAuthenticationFilter;
 import com.bank.application.security.service.ApplicationUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,23 +28,28 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserService userService;
+    private final SecurityConfig securityConfig;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf().disable()
+                .sessionManagement()
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new JwtUserAndPasswordAuthenticationFilter(authenticationManager(), securityConfig))
+                .addFilterAfter(new JwtAuthenticationFilter(), JwtUserAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/users", "/users/*", "/users/employees").permitAll()
-                .antMatchers(
-                        HttpMethod.POST,
-                        "users/"
-                ).permitAll()
+                .antMatchers( "/users/employees").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
                         "/users/clients",
                         "/users/employees",
-                        "/accounts",
-                        "/users"
+                        "/accounts"
+//                        "/users"
                 ).hasRole("ADMIN")
 //                .antMatchers(
 //                        HttpMethod.POST,
@@ -50,6 +59,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                         HttpMethod.DELETE,
                         "/users"
                 ).hasRole("ADMIN")
+//                .antMatchers(
+//                        HttpMethod.POST,
+//                        "users/"
+//                ).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -87,4 +100,5 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return provider;
     }
+
 }
