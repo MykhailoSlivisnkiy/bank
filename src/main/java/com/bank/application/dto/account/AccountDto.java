@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountDto {
+    private Long id;
     private String accountNumber;
     private String cvv;
     private Integer balance;

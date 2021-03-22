@@ -1,9 +1,10 @@
 package com.bank.application.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transactions")
@@ -24,7 +25,7 @@ public class Transaction {
     private Integer amount;
 
     @Column(name = "transaction_date")
-    private Date transactionDate;
+    private LocalDateTime transactionDate;
 
     @Column(name = "description")
     private String description;
@@ -35,4 +36,9 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    @PrePersist()
+    public void createOpenedDate() {
+        setTransactionDate(LocalDateTime.now());
+    }
 }

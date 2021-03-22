@@ -2,10 +2,12 @@ package com.bank.application.model;
 
 import com.bank.application.model.enums.AccountStatus;
 import com.bank.application.model.enums.AccountType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "Account")
 @Table(name = "accounts")
@@ -39,6 +41,7 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", nullable = false)
+    @JsonIgnore()
     private User user;
 
     @Enumerated(value = EnumType.ORDINAL)
@@ -48,6 +51,10 @@ public class Account {
     @Enumerated(value = EnumType.ORDINAL)
     @JoinColumn(name = "account_type", nullable = false)
     private AccountType accountType;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Transaction> transactions;
 
     @PrePersist()
     public void createOpenedDate() {

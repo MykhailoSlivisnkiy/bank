@@ -14,6 +14,8 @@ DROP TABLE IF EXISTS client_attributes CASCADE;
 
 DROP TABLE IF EXISTS employee_attributes CASCADE;
 
+DROP TABLE IF EXISTS transactions CASCADE;
+
 DROP SEQUENCE IF EXISTS user_id_seq;
 DROP SEQUENCE IF EXISTS transaction_id_seq;
 DROP SEQUENCE IF EXISTS accounts_id_seq;
@@ -86,4 +88,17 @@ CREATE TABLE IF NOT EXISTS accounts
 	CONSTRAINT fK_account_type
 	    FOREIGN KEY(account_type)
 	    REFERENCES account_type(id)
+);
+
+CREATE TABLE IF NOT EXISTS transactions
+(
+    id BIGSERIAL PRIMARY KEY ,
+    amount_of_money INTEGER ,
+    transaction_date DATE NOT NULL ,
+    description VARCHAR(255) ,
+    type VARCHAR(25) ,
+    account_id BIGSERIAL NOT NULL ,
+    CONSTRAINT fk_account_id
+        FOREIGN KEY(account_id)
+        REFERENCES accounts(id)
 );

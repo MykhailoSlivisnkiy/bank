@@ -5,11 +5,14 @@ import com.bank.application.dto.account.AccountDto;
 import com.bank.application.exception.NotFoundIdException;
 import com.bank.application.mapper.account.AccountResponseMapper;
 import com.bank.application.model.Account;
+import com.bank.application.model.User;
 import com.bank.application.repository.AccountRepository;
+import com.bank.application.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 public class AccountService {
     private AccountRepository accountRepository;
     private AccountResponseMapper mapper;
+    private UserService userService;
 
     public void create(Account account) {
         accountRepository.save(account);
@@ -26,6 +30,13 @@ public class AccountService {
         return accountRepository.findAll().stream()
                 .map(account -> mapper.convertToDto(account))
                 .collect(Collectors.toList());
+    }
+
+    public Set<AccountDto> findAllAccountsByUser(Long userId) {
+        User user = userService.findById(userId);
+        return accountRepository.findAllByUser(user).stream()
+                .map(account -> mapper.convertToDto(account))
+                .collect(Collectors.toSet());
     }
 
     public AccountDto findById(Long id) {

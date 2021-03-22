@@ -46,6 +46,9 @@ public class User {
     @Column(name = "salary")
     private Integer salary;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Account> account;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @Column(name = "role_id", nullable = false)

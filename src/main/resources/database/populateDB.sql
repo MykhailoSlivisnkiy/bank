@@ -52,3 +52,10 @@ INSERT INTO user_role VALUES
 (1, 2),
 (2, 1),
 (3, 0);
+
+INSERT INTO transactions VALUES
+(1, 150, '2001-02-14', 'Enrollment of the transfer on the card', 'Transfer', 1),
+(2, -250, '2001-02-14', 'Cash withdrawal at an ATM', 'Removal', 1),
+(3, -50, '2001-02-14', 'Cash withdrawal at an ATM', 'Removal', 1),
+(4, -2250, '2001-02-14', 'Cash withdrawal at an ATM', 'Removal', 2),
+(5, -5000, '2001-02-14', 'Cash withdrawal at an ATM', 'Removal', 2);

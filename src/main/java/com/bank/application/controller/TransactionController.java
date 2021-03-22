@@ -1,8 +1,6 @@
 package com.bank.application.controller;
 
-import com.bank.application.model.AccountType;
 import com.bank.application.model.Transaction;
-import com.bank.application.service.AccountTypeService;
 import com.bank.application.service.TransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +10,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/transactions")
 @AllArgsConstructor
+@CrossOrigin
 public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping()
     public List<Transaction> findAllTransactions(){
         return transactionService.findAll();
+    }
+
+    @GetMapping("/account/{id}")
+    public List<Transaction> findAllTransactionsByAccount(@PathVariable Long id){
+        return transactionService.findAllTransactionByAccount(id);
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.bank.application.service;
 
+import com.bank.application.Application;
 import com.bank.application.constant.ErrorMessages;
 import com.bank.application.dto.user.ClientDto;
 import com.bank.application.dto.user.EmployeeDto;
@@ -9,7 +10,15 @@ import com.bank.application.mapper.user.EmployeeResponseMapper;
 import com.bank.application.model.User;
 import com.bank.application.model.enums.Role;
 import com.bank.application.repository.UserRepository;
+import com.bank.application.security.entity.ApplicationUser;
+import com.bank.application.security.entity.UserToken;
+import com.bank.application.security.filters.UsernameAndPasswordAuthenticationRequest;
+import com.bank.application.security.jwt.JwtTokenProvider;
+import com.bank.application.security.service.ApplicationUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +30,16 @@ public class UserService {
     private UserRepository userRepository;
     private ClientResponseMapper clientMapper;
     private EmployeeResponseMapper employeeMapper;
+    private JwtTokenProvider tokenProvider;
+
+    public UserToken login(UsernameAndPasswordAuthenticationRequest request) {
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                request.getUsername(),
+                request.getPassword());
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        return new UserToken(tokenProvider.generateAccessToken(auth));
+    }
 
     public void create(User user) {
         userRepository.save(user);
