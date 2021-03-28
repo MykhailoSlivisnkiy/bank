@@ -33,12 +33,17 @@ public class Transaction {
     @Column(name = "type")
     private String type;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     private Account account;
 
     @PrePersist()
-    public void createOpenedDate() {
+    public void createTransactionDate() {
+        setTransactionDate(LocalDateTime.now());
+    }
+
+    @PreUpdate()
+    public void updateTransactionDate() {
         setTransactionDate(LocalDateTime.now());
     }
 }

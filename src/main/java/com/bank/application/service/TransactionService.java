@@ -1,17 +1,14 @@
 package com.bank.application.service;
 
 import com.bank.application.constant.ErrorMessages;
+import com.bank.application.dto.transaction.TransactionDto;
 import com.bank.application.exception.NotFoundIdException;
-import com.bank.application.mapper.account.AccountResponseMapper;
+import com.bank.application.mapper.transaction.TransactionRequestMapper;
 import com.bank.application.model.Account;
 import com.bank.application.model.Transaction;
 import com.bank.application.repository.AccountRepository;
 import com.bank.application.repository.TransactionRepository;
-import com.bank.application.security.entity.UserToken;
-import com.bank.application.security.filters.UsernameAndPasswordAuthenticationRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +18,11 @@ import java.util.List;
 public class TransactionService {
     private TransactionRepository transactionRepository;
     private AccountRepository accountRepository;
+    private TransactionRequestMapper transactionMapper;
 
-    public void create(Transaction transaction) {
-        transactionRepository.save(transaction);
+    public void create(TransactionDto transaction) {
+
+        transactionRepository.save(transactionMapper.convertToEntity(transaction));
     }
 
     public List<Transaction> findAllTransactionByAccount(Long accountId) {
@@ -42,10 +41,9 @@ public class TransactionService {
         );
     }
 
-    public boolean update(Transaction transaction, Long id) {
-        if (transactionRepository.existsById(id)) {
-            transaction.setId(id);
-            transactionRepository.save(transaction);
+    public boolean update(TransactionDto transaction) {
+        if (transactionRepository.existsById(transaction.getId())) {
+            transactionRepository.save(transactionMapper.convertToEntity(transaction));
             return true;
         }
 

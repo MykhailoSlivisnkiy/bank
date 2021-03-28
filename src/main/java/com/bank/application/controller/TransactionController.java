@@ -1,5 +1,6 @@
 package com.bank.application.controller;
 
+import com.bank.application.dto.transaction.TransactionDto;
 import com.bank.application.model.Transaction;
 import com.bank.application.service.TransactionService;
 import lombok.AllArgsConstructor;
@@ -30,8 +31,13 @@ public class TransactionController {
     }
 
     @PostMapping()
-    public void createTransaction(@RequestBody Transaction transaction) {
+    public void createTransaction(@RequestBody TransactionDto transaction) {
         transactionService.create(transaction);
+    }
+
+    @PutMapping()
+    public void updateTransaction(@RequestBody TransactionDto transaction) {
+        transactionService.update(transaction);
     }
 
     @DeleteMapping("/{id}")

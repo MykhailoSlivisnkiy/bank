@@ -38,6 +38,8 @@ public class UserService {
                 request.getPassword());
 
         SecurityContextHolder.getContext().setAuthentication(auth);
+        User user = userRepository.findAllByUsername(request.getUsername())
+                .orElseThrow(() -> new NotFoundIdException(String.format(ErrorMessages.USER_WAS_NOT_FOUND_BY_ID, request.getUsername())));
         return new UserToken(tokenProvider.generateAccessToken(auth));
     }
 
@@ -67,9 +69,8 @@ public class UserService {
         );
     }
 
-    public boolean update(User user, Long id) {
-        if (userRepository.existsById(id)) {
-            user.setId(id);
+    public boolean update(User user) {
+        if (userRepository.existsById(user.getId())) {
             userRepository.save(user);
             return true;
         }

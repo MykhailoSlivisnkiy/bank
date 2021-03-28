@@ -39,7 +39,7 @@ public class Account {
     @Column(name = "opened_date")
     private LocalDateTime openedDate;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id", nullable = false)
     @JsonIgnore()
     private User user;

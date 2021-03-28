@@ -2,12 +2,15 @@ package com.bank.application.service;
 
 import com.bank.application.constant.ErrorMessages;
 import com.bank.application.dto.account.AccountDto;
+import com.bank.application.dto.account.AccountRequestDto;
 import com.bank.application.exception.NotFoundIdException;
+import com.bank.application.mapper.account.AccountRequestMapper;
 import com.bank.application.mapper.account.AccountResponseMapper;
 import com.bank.application.model.Account;
 import com.bank.application.model.User;
+import com.bank.application.model.enums.AccountStatus;
+import com.bank.application.model.enums.AccountType;
 import com.bank.application.repository.AccountRepository;
-import com.bank.application.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,34 +22,39 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AccountService {
     private AccountRepository accountRepository;
-    private AccountResponseMapper mapper;
+    private AccountResponseMapper responseMapper;
+    private AccountRequestMapper requestMapper;
     private UserService userService;
 
-    public void create(Account account) {
+    public void create(AccountRequestDto accountDto) {
+        Account account = requestMapper.convertToEntity(accountDto);
+        account.setUser(userService.findById(accountDto.getUserId()));
+
         accountRepository.save(account);
     }
 
     public List<AccountDto> findAll() {
         return accountRepository.findAll().stream()
-                .map(account -> mapper.convertToDto(account))
+                .map(account -> responseMapper.convertToDto(account))
                 .collect(Collectors.toList());
     }
 
     public Set<AccountDto> findAllAccountsByUser(Long userId) {
         User user = userService.findById(userId);
         return accountRepository.findAllByUser(user).stream()
-                .map(account -> mapper.convertToDto(account))
+                .map(account -> responseMapper.convertToDto(account))
                 .collect(Collectors.toSet());
     }
 
     public AccountDto findById(Long id) {
-        return mapper.convertToDto(accountRepository.findById(id).orElseThrow(
+        return responseMapper.convertToDto(accountRepository.findById(id).orElseThrow(
                 () -> new NotFoundIdException(String.format(ErrorMessages.ACCOUNT_WAS_NOT_FOUND_BY_ID, id))));
     }
 
-    public Boolean update(Account account, Long id) {
-        if(accountRepository.existsById(id)) {
-            account.setId(id);
+    public Boolean update(AccountRequestDto accountDto) {
+        if(accountRepository.existsById(accountDto.getId())) {
+            Account account = requestMapper.convertToEntity(accountDto);
+            account.setUser(userService.findById(accountDto.getUserId()));
             accountRepository.save(account);
             return true;
         }

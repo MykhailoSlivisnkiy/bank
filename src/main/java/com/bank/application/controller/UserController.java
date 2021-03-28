@@ -7,9 +7,7 @@ import com.bank.application.security.entity.UserToken;
 import com.bank.application.security.filters.UsernameAndPasswordAuthenticationRequest;
 import com.bank.application.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,39 +20,49 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
     public UserToken login(@RequestBody UsernameAndPasswordAuthenticationRequest request) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
-                request.getPassword());
         return userService.login(request);
     }
 
     @GetMapping("/clients")
+    @ResponseStatus(HttpStatus.OK)
     public List<ClientDto> findAllClients() {
         return userService.findAllClients();
     }
 
     @GetMapping("/employees")
+    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeDto> findAllEmployees() {
         return userService.findAllEmployees();
     }
 
     @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
     public List<User> findAllUsers(){
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public User findUser(@PathVariable("id") Long id) {
         return userService.findById(id);
     }
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public void createUser(@RequestBody User user) {
         userService.create(user);
     }
 
+    @PutMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser(@RequestBody User user) {
+        userService.update(user);
+    }
+
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
     }
